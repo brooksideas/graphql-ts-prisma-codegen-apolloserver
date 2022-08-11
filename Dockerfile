@@ -7,8 +7,7 @@ RUN apk update && apk add bash
 
 COPY package*.json yarn.lock /app/
 
-COPY .env.example /app/.env.example
-COPY .env.test /app/.env.test
+COPY .env /app/.env
 
 # copy source files
 COPY src /app/src

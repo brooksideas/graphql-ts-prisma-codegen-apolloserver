@@ -6,7 +6,7 @@ services:
   server:
     container_name: server
     environment:
-      DATABASE_URL: postgresql://prisma:prisma@db:5432/bookdb?schema=public
+      DATABASE_URL: mongodb://brook:brook-mongo-2022@localhost:27017/library
     build:
       context: '.'
       target: base
@@ -17,15 +17,15 @@ services:
     networks:
       - test_vm
   db:
-    image: postgres:13
+    image: mongo:5.0
     restart: always
     container_name: db
     ports:
-      - '5432:5432'
+      - '27017:27017'
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
-      POSTGRES_DB: tests
+      MONGODB_USER: brook
+      MONGODB_PASSWORD: brook-mongo-2022
+      MONGODB_DB: library
     networks:
       - test_vm
 networks:
