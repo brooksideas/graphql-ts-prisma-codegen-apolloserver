@@ -1,4 +1,5 @@
-import { gql, makeExecutableSchema } from 'apollo-server';
+import { gql } from 'apollo-server';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLSchema, printSchema } from 'graphql';
 import mutationType from '@src/graphql/schema/typedefs/MutationType';
 import queryType from '@src/graphql/schema/typedefs/QueryType';

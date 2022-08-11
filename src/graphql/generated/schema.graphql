@@ -54,4 +54,7 @@ input CreateBookInput {
 input CreateAuthorInput {
   """The authors username"""
   username: String!
+
+  """The book id."""
+  bookId: String!
 }

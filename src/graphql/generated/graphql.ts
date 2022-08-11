@@ -12,47 +12,87 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  _FieldSet: any;
+};
+
+
+
+
+
+/** A author */
+export type Author = {
+  __typename?: 'Author';
+  /** id of the author */
+  authorId: Scalars['ID'];
+  /** authors username */
+  username?: Maybe<Scalars['String']>;
+  /** list of authors books */
+  books?: Maybe<Array<Maybe<Book>>>;
 };
 
 /** A book */
 export type Book = {
   __typename?: 'Book';
   /** id of the book */
-  id: Scalars['ID'];
+  bookId: Scalars['ID'];
   /** title of book */
   title?: Maybe<Scalars['String']>;
   /** author of book */
-  author?: Maybe<Scalars['String']>;
+  author?: Maybe<Author>;
+  /** id of the author */
+  authorId?: Maybe<Scalars['Int']>;
+};
+
+/** Create author input */
+export type CreateAuthorInput = {
+  /** The authors username */
+  username: Scalars['String'];
 };
 
 /** Create book input */
 export type CreateBookInput = {
-  /** An arbitrary integer. */
+  /** The books title. */
   title: Scalars['String'];
-  /** An arbitrary integer. */
-  author: Scalars['String'];
+  /** The authors id. */
+  authorId: Scalars['Int'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Create book */
   createBook?: Maybe<Book>;
+  /** create author */
+  createAuthor?: Maybe<Author>;
 };
 
 
 export type MutationCreateBookArgs = {
-  input: CreateBookInput;
+  input?: Maybe<CreateBookInput>;
+};
+
+
+export type MutationCreateAuthorArgs = {
+  input?: Maybe<CreateAuthorInput>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  /** Get all books query */
   books?: Maybe<Array<Maybe<Book>>>;
+  /** Get all authors query */
+  authors?: Maybe<Array<Maybe<Author>>>;
 };
+
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
 
 export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
   fragment: string;
@@ -66,6 +106,7 @@ export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
 export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
   | ResolverFn<TResult, TParent, TContext, TArgs>
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>
   | StitchingResolver<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -127,9 +168,12 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Book: ResolverTypeWrapper<Book>;
+  Author: ResolverTypeWrapper<Author>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Book: ResolverTypeWrapper<Book>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  CreateAuthorInput: CreateAuthorInput;
   CreateBookInput: CreateBookInput;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -138,31 +182,45 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Book: Book;
+  Author: Author;
   ID: Scalars['ID'];
   String: Scalars['String'];
+  Book: Book;
+  Int: Scalars['Int'];
+  CreateAuthorInput: CreateAuthorInput;
   CreateBookInput: CreateBookInput;
   Mutation: {};
   Query: {};
   Boolean: Scalars['Boolean'];
 }>;
 
+export type AuthorResolvers<ContextType = IPrismaContext, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = ResolversObject<{
+  authorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type BookResolvers<ContextType = IPrismaContext, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  bookId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  author?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType>;
+  authorId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MutationResolvers<ContextType = IPrismaContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
+  createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, never>>;
+  createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, never>>;
 }>;
 
 export type QueryResolvers<ContextType = IPrismaContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
+  authors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = IPrismaContext> = ResolversObject<{
+  Author?: AuthorResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

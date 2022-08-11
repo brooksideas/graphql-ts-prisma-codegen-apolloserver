@@ -7,11 +7,11 @@ export const getAllAuthors = async (): Promise<Author[]> => {
 };
 
 export const getAuthorById = async (
-  authorId: number
+  authorId: string
 ): Promise<Author | null> => {
   return prismaContext.prisma.author.findUnique({
     where: {
-      authorId,
+      authorId
     },
   });
 };

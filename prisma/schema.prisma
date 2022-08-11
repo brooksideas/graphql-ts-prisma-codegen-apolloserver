@@ -1,24 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
-model Book {
-  bookId   Int    @id @default(autoincrement())
-  title    String
-  author   Author @relation(fields: [authorId], references: [authorId])
-  authorId Int
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model Author {
-  authorId Int    @id @default(autoincrement())
+  authorId   String @id @default(auto()) @map("_id") @db.ObjectId
   username String
-  books    Book[]
+  books Book[]
+}
+
+model Book {
+  bookId        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @map("__v")
+  title     String
+  author    Author @relation(fields: [authorId], references: [authorId])
+  authorId String @db.ObjectId
+  createdAt DateTime @db.Date
+  updatedAt DateTime @db.Date @updatedAt
 }
